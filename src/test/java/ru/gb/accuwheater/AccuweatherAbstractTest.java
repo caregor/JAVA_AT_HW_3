@@ -1,5 +1,6 @@
 package ru.gb.accuwheater;
 
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.io.FileInputStream;
@@ -16,6 +17,7 @@ public abstract class AccuweatherAbstractTest {
 
     @BeforeAll
     static void initTest() throws IOException {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         configFile = new FileInputStream("src/test/resources/accuweather.properties");
         prop.load(configFile);
 
