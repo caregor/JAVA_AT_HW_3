@@ -3,7 +3,6 @@ package ru.gb.accuwheater;
 import io.restassured.http.Method;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import ru.gb.accuweather.location.Location;
 
