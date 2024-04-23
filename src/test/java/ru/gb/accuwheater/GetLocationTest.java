@@ -1,5 +1,6 @@
 package ru.gb.accuwheater;
 
+import io.restassured.http.Method;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
@@ -24,8 +25,25 @@ public class GetLocationTest extends AccuweatherAbstractTest{
                 .time(Matchers.lessThan(1000l))
                 .extract()
                 .body().jsonPath().getList(".", Location.class);
-
         Assertions.assertEquals(1, response.size());
         Assertions.assertEquals("Kemerovo", response.get(0).getEnglishName());
+    }
+    @Test
+    void getLocation_by_locationKey(){
+        Location response = given()
+                .header("Accept-Encoding", "gzip")
+                .queryParam("apikey", getApikey())
+                .pathParam("locationkey", 293142)
+                .when()
+                .request(Method.GET, getBaseUrl()+"/locations/v1/{locationkey}")
+                .then()
+                .statusCode(200)
+                .time(Matchers.lessThan(1000l))
+                .extract()
+                .body().jsonPath().getObject(".", Location.class);
+
+        Assertions.assertEquals("City", response.getType());
+        Assertions.assertEquals("Kemerovo", response.getEnglishName());
+
     }
 }
