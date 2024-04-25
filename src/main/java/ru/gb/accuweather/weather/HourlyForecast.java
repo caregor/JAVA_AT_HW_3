@@ -34,7 +34,7 @@ public class HourlyForecast {
     @JsonProperty("IsDaylight")
     private Boolean isDaylight;
     @JsonProperty("Temperature")
-    private Temperature temperature;
+    private HourTemperature temperature;
     @JsonProperty("PrecipitationProbability")
     private Integer precipitationProbability;
     @JsonProperty("MobileLink")
@@ -103,12 +103,12 @@ public class HourlyForecast {
     }
 
     @JsonProperty("Temperature")
-    public Temperature getTemperature() {
+    public HourTemperature getTemperature() {
         return temperature;
     }
 
     @JsonProperty("Temperature")
-    public void setTemperature(Temperature temperature) {
+    public void setTemperature(HourTemperature temperature) {
         this.temperature = temperature;
     }
 
