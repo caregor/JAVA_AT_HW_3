@@ -1,0 +1,527 @@
+{
+	"info": {
+		"_postman_id": "e409b4db-f869-4a37-9eba-b3aad74c67ad",
+		"name": "AccuWeather",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "23828459"
+	},
+	"item": [
+		{
+			"name": "City Search",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"pm.test('Count object = ' + pm.response.json().length, function () {",
+							"    pm.expect(pm.response.json().length).to.equal(1);",
+							"});",
+							"",
+							"pm.test(\"Location key is valid\", function () {",
+							"    pm.expect(pm.response.json()[0].Key).to.eql(\"293142\");",
+							"});",
+							"",
+							"pm.test(\"Body matches City name\", function () {",
+							"    pm.expect(pm.response.json()[0].LocalizedName).to.eql(\"Kemerovo\");",
+							"});",
+							"",
+							"pm.collectionVariables.set(\"locatiokey\", pm.response.json()[0].Key);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/locations/v1/cities/search?apikey={{apikey}}&q=kemerovo",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"locations",
+						"v1",
+						"cities",
+						"search"
+					],
+					"query": [
+						{
+							"key": "apikey",
+							"value": "{{apikey}}"
+						},
+						{
+							"key": "q",
+							"value": "kemerovo"
+						}
+					]
+				},
+				"description": "Returns information for an array of cities that match the search text."
+			},
+			"response": []
+		},
+		{
+			"name": "Search by locationKey",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"pm.test(\"Body matches City name\", function () {",
+							"    pm.expect(pm.response.json().LocalizedName).to.eql(\"Kemerovo\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/locations/v1/:locationKey?apikey={{apikey}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"locations",
+						"v1",
+						":locationKey"
+					],
+					"query": [
+						{
+							"key": "apikey",
+							"value": "{{apikey}}",
+							"description": "Provided API Key."
+						},
+						{
+							"key": "details",
+							"value": "",
+							"description": "Boolean value specifies whether or not to include full details in the response.",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "locationKey",
+							"value": "{{locatiokey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1 Day of Daily Forecasts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"pm.test(\"Metric system is False\", function () {",
+							"    pm.expect(pm.response.json().DailyForecasts[0].Temperature.Minimum.Unit).to.eql(\"F\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/forecasts/v1/daily/1day/:locationKey?apikey={{apikey}}&metrics",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"forecasts",
+						"v1",
+						"daily",
+						"1day",
+						":locationKey"
+					],
+					"query": [
+						{
+							"key": "apikey",
+							"value": "{{apikey}}",
+							"description": "Provided API Key"
+						},
+						{
+							"key": "metrics",
+							"value": null,
+							"description": "Boolean value specifies whether or not to display metric values."
+						}
+					],
+					"variable": [
+						{
+							"key": "locationKey",
+							"value": "{{locatiokey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1 Day of Daily Forecasts metics",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Response time is less than 1000ms', function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"})",
+							"",
+							"pm.test(\"Metric system is True\", function () {",
+							"    pm.expect(pm.response.json().DailyForecasts[0].Temperature.Minimum.Unit).to.eql(\"C\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/forecasts/v1/daily/1day/:locationKey?apikey={{apikey}}&metric=true",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"forecasts",
+						"v1",
+						"daily",
+						"1day",
+						":locationKey"
+					],
+					"query": [
+						{
+							"key": "apikey",
+							"value": "{{apikey}}",
+							"description": "Provided API Key"
+						},
+						{
+							"key": "metric",
+							"value": "true",
+							"description": "Boolean value specifies whether or not to display metric values."
+						}
+					],
+					"variable": [
+						{
+							"key": "locationKey",
+							"value": "{{locatiokey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10 Days of Daily Forecasts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/forecasts/v1/daily/10day/:locationKey?apikey={{apikey}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"forecasts",
+						"v1",
+						"daily",
+						"10day",
+						":locationKey"
+					],
+					"query": [
+						{
+							"key": "apikey",
+							"value": "{{apikey}}",
+							"description": "Provided API Key"
+						},
+						{
+							"key": "metrics",
+							"value": null,
+							"description": "Boolean value specifies whether or not to display metric values.",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "locationKey",
+							"value": "{{locatiokey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1 Hour of Hourly Forecasts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/forecasts/v1/hourly/1hour/:locationKey?apikey={{apikey}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"forecasts",
+						"v1",
+						"hourly",
+						"1hour",
+						":locationKey"
+					],
+					"query": [
+						{
+							"key": "apikey",
+							"value": "{{apikey}}",
+							"description": "Provided API Key"
+						},
+						{
+							"key": "metrics",
+							"value": null,
+							"description": "Boolean value specifies whether or not to display metric values.",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "locationKey",
+							"value": "{{locatiokey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Current Conditions for Top Cities",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"pm.test('Count object = ' + pm.response.json().length, function () {",
+							"    pm.expect(pm.response.json().length).to.equal(50);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/currentconditions/v1/topcities/:group?apikey={{apikey}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"currentconditions",
+						"v1",
+						"topcities",
+						":group"
+					],
+					"query": [
+						{
+							"key": "apikey",
+							"value": "{{apikey}}"
+						},
+						{
+							"key": "metrics",
+							"value": "",
+							"description": "Boolean value specifies whether or not to display metric values.",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "group",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Historical Current Conditions (past 24 hours)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"pm.test('Count object = ' + pm.response.json().length, function () {",
+							"    pm.expect(pm.response.json().length).to.equal(24);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/currentconditions/v1/:locationkey/historical/24?apikey={{apikey}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"currentconditions",
+						"v1",
+						":locationkey",
+						"historical",
+						"24"
+					],
+					"query": [
+						{
+							"key": "apikey",
+							"value": "{{apikey}}"
+						},
+						{
+							"key": "metrics",
+							"value": "",
+							"description": "Boolean value specifies whether or not to display metric values.",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "locationkey",
+							"value": "{{locatiokey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://dataservice.accuweather.com"
+		},
+		{
+			"key": "locatiokey",
+			"value": ""
+		},
+		{
+			"key": "apikey",
+			"value": "evmnQ8vzFKgPaIIviESM4AVKryBsijKG"
+		}
+	]
+}
